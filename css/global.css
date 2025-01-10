@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    font-family: "Cabin", serif;
+}
+li{
+
+    list-style: none;
+}
+ul{
+    margin: 0 !important;
+}
+a{
+    text-decoration: none !important;
+}
