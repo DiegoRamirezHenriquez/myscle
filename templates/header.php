@@ -40,7 +40,7 @@ $isLoggedIn = isset($email);
             <?php
             if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
                 session_destroy();
-                header("Location: index-no-acc.php");
+                header("Location: index.php");
                 exit();
             }
             ?>

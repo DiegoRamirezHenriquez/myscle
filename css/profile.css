@@ -31,3 +31,43 @@
 .profile-data p {
     margin: 5px 0;
 }
+.edit-profile-container {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.edit-profile-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.edit-profile-img input[type="file"] {
+    display: block;
+    margin: 0 auto;
+}
+
+.edit-profile-data {
+    text-align: left;
+}
+
+.edit-profile-data h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.edit-profile-data p {
+    margin: 5px 0;
+}
+
+.edit-profile-options {
+    margin-top: 20px;
+}
+
+.btn-save-profile {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
