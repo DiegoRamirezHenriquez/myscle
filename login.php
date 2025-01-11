@@ -1,5 +1,22 @@
 <?php
-include("templates/header.php")
+include("templates/header.php");
+include("conexion.php");
+$mensaje = "";
+if(isset($_POST['login'])){
+  $email=$_POST['email'];
+  $password=$_POST['password'];
+  $query="SELECT * FROM usuarios WHERE email='$email' AND password='$password'";
+  $result=mysqli_query($conn, $query);
+  if(mysqli_num_rows($result)>0){
+      header("Location: index.php");
+  }else{
+      $mensaje = "Correo o contraseña incorrectos";
+  }
+  //crear sesion
+  session_start();
+  $_SESSION['email'] = $email;
+
+}
 ?>
 <div id="form-ui">
     <form action="" method="post" id="form">
@@ -19,6 +36,9 @@ include("templates/header.php")
             <div id="submit-button-cvr">
               <button id="submit-button" type="submit" name="login">Iniciar sesión</button>
             </div>
+            <div>
+              <span id="err-msg"><?php echo $mensaje ?></span>
+            </div>
             <div id="forgot-pass">
               <a href="#">¿Olvidaste tu contraseña?</a>
             </div>
@@ -26,21 +46,11 @@ include("templates/header.php")
         </form>
 </div>
 <?php
-if(isset($_POST['login'])){
-    $email=$_POST['email'];
-    $password=$_POST['password'];
-    $query="SELECT * FROM users WHERE email='$email' AND password='$password'";
-    $result=mysqli_query($conn, $query);
-    if(mysqli_num_rows($result)>0){
-        echo "Usuario logueado";
-    }else{
-        echo "Usuario no encontrado";
-    }
-}
+
 
 ?>
 
 
 <?php
-include("templates/footer.php")
+include("templates/footer.php");
 ?>

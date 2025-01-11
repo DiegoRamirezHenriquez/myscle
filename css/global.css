@@ -15,3 +15,8 @@ ul{
 a{
     text-decoration: none !important;
 }
+button{
+    cursor: pointer;
+    border: none;
+    outline: none;
+}

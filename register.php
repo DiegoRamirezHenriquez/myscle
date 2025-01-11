@@ -1,16 +1,39 @@
 <?php
 include("templates/header.php");
 include("conexion.php");
-$mensaje="";
+$mensaje = "";
+if(isset($_POST['register'])){
+  
+  $email = $_POST['email'];
+  $name = $_POST['name'];
+  $password = $_POST['password'];
+
+  $checkEmailQuery = "SELECT * FROM usuarios WHERE email='$email'";
+  $checkEmailResult = mysqli_query($conn, $checkEmailQuery);
+
+  if(mysqli_num_rows($checkEmailResult) > 0){
+    $mensaje = "El correo electrónico ya está registrado";
+  } else {
+    $query = "INSERT INTO usuarios (email, name, password) VALUES ('$email', '$name', '$password')";
+    $result = mysqli_query($conn, $query);
+    if($result){
+      session_start();
+      $_SESSION['email'] = $email;
+      header("Location: index.php");
+    } else {
+      $mensaje = "Error al registrar usuario";
+    }
+  }
+}
 ?>
-<div id="form-ui">
-    <form method="<?php $_SERVER["PHP_SELF"]; ?>" id="form">
-          <div id="form-body">
-            <div id="welcome-lines">
-              <div id="welcome-line-1">Crear cuenta</div>
-              <div id="welcome-line-2">¡Bienvenido!</div>
+<div class="form-ui">
+    <form method="post" class="form">
+          <div class="form-body">
+            <div class="welcome-lines">
+              <div class="welcome-line-1">Crear cuenta</div>
+              <div class="welcome-line-2">¡Bienvenido!</div>
             </div>
-            <div id="input-area">
+            <div class="input-area">
               <div class="form-inp">
                 <input placeholder="Correo electronico" type="text" name="email">
               </div>
@@ -21,33 +44,20 @@ $mensaje="";
                 <input placeholder="Contraseña" type="password" name="password">
               </div>
             </div>
-            <div id="submit-button-cvr">
-              <button id="submit-button" type="submit" name="register">Crear cuenta</button>
+            <div class="submit-button-cvr">
+              <button class="submit-button" type="submit" name="register">Crear cuenta</button>
             </div>
             <div>
-              <span><?php echo $mensaje ?></span>
+              <span class="err-msg"><?php echo $mensaje ?></span>
             </div>
-            <div id="forgot-pass">
-              <a href="#">¿Ya tienes cuenta?</a>
+            <div class="account-exists">
+              <a href="login.php">¿Ya tienes cuenta?</a>
             </div>
           </div>
         </form>
 </div>
 
-<?php
-if(isset($_POST['register'])){
-    $email=$_POST['email'];
-    $name=$_POST['name'];
-    $password=$_POST['password'];
-    $query="INSERT INTO users (email, name, password) VALUES ('$email', '$name', '$password')";
-    $result=mysqli_query($conn, $query);
-    if($result){
-        echo "Usuario registrado";
-    }else{
-        $mensaje="Error al registrar usuario";
-    }
-}
-?>
+
 
 <?php
 
