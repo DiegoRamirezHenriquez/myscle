@@ -19,7 +19,7 @@ if(isset($_POST['register'])){
     if($result){
       session_start();
       $_SESSION['email'] = $email;
-      header("Location: index.php");
+      header("Location: profile.php");
     } else {
       $mensaje = "Error al registrar usuario";
     }

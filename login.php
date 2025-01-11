@@ -8,7 +8,7 @@ if(isset($_POST['login'])){
   $query="SELECT * FROM usuarios WHERE email='$email' AND password='$password'";
   $result=mysqli_query($conn, $query);
   if(mysqli_num_rows($result)>0){
-      header("Location: index.php");
+      header("Location: profile.php");
   }else{
       $mensaje = "Correo o contraseña incorrectos";
   }
