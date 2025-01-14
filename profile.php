@@ -356,9 +356,9 @@ if(isset($_POST['publicar'])){
                         <div class="post-options">
                             <div class="post-buttons">
                                 <button class="btn-like">
-                                    <i class='bx bx-like' style='color:#02b03a'  ></i>
+                                    <i class='bx bx-heart' style='color:#02b03a' ></i>
                                     <!-- si tiene el like que salga este
-                                     <i class='bx bxs-like' style='color:#02b03a' ></i>
+                                     <i class='bx bxs-heart' style='color:#02b03a' ></i>
                                     -->
                                 </button>
                                 <button class="btn-comment">
@@ -370,51 +370,18 @@ if(isset($_POST['publicar'])){
                                     <i class='bx bx-dots-vertical-rounded' style='color:#02b03a' ></i>
                                 </button>
                                 <div class="dropdown-content">
-                                    <form method="POST" action="edit_post.php">
+                                    <form method="POST" action="actions/edit_post.php">
                                         <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
                                         <button type="submit" name="edit-post">Editar</button>
                                     </form>
-                                    <form method="POST" action="delete_post.php">
+                                    <form method="POST" action="actions/delete_post.php">
                                         <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
                                         <button type="submit" name="delete-post">Borrar</button>
                                     </form>
                                 </div>
                             </div>
                             <style>
-                                .dropdown {
-                                    position: relative;
-                                    display: inline-block;
-                                }
-                                .dropbtn {
-                                    
-                                    border: none;
-                                    cursor: pointer;
-                                    padding: 5px;
-                                    font-size: 16px;
-                                }
-                                .dropdown-content {
-                                    display: none;
-                                    position: absolute;
-                                    min-width: 160px;
-                                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-                                    z-index: 1;
-                                }
-                                .dropdown-content button {
-                                    color: black;
-                                    padding: 12px 16px;
-                                    text-decoration: none;
-                                    display: block;
-                                    width: 100%;
-                                    border: none;
-                                    background: none;
-                                    text-align: left;
-                                }
-                                .dropdown-content button:hover {
-                                    background-color: #ddd;
-                                }
-                                .dropdown:hover .dropdown-content {
-                                    display: block;
-                                }
+                                
                             </style>
 
                         </div>

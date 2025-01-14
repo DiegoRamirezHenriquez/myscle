@@ -1,0 +1,131 @@
+.profile-posts-container {
+    height: auto;
+    background-color: #2f7192;
+    border-radius: 12px;
+    padding: 10px;
+    max-width: 70%;
+}
+
+.profile-posts {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    
+}
+
+.post {
+    width: 90%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.post-img{
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+    
+}
+.post-img img {
+    max-width: 15%;
+    border-radius: 10px;
+}
+
+.post-data {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+}
+.post-data p {
+    width: 100%;
+    font-size: 18px;
+    color: #fff;
+}
+.post-info{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.post-info p {
+    font-size: 13px;
+    color: #939393;
+}
+.post-user {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.post-user img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #02b03a;
+    margin-right: 10px;
+}
+.post-user h2 a{
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+}
+.post-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #2f7192;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.post-options{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropbtn {
+    
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 16px;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    background-color: #1B6B93;
+    border-radius: 12px;
+}
+.dropdown-content button {
+    color: #fff;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    border: none;
+    background: none;
+    text-align: left;
+    
+}
+.dropdown-content button:hover {
+    border-radius: 12px;
+    background-color: #155676;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.btn-like , .btn-comment , .dropbtn{
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 25px;
+}
