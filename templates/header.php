@@ -15,10 +15,11 @@ $isLoggedIn = isset($email);
     <link rel="shortcut icon" href="images/icons/solo.png">
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/register.css">
     <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="css/edit-profile.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>    
@@ -27,7 +28,7 @@ $isLoggedIn = isset($email);
         <p></p>
         <ul class="categorias">
             <li><a href="profile.php">PERFIL</a></li>
-            <li>Ejercicios</li>
+            <li><a href="home.php">HOME</a></li>
             <li>Rutinas</li>
         </ul>
         <?php if(!$isLoggedIn){ ?>

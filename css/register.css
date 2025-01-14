@@ -4,7 +4,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #4FC0D0;
+    background-image: url(../images/register-bg.jpg);
+    background-size: cover;
+    background-position: center;
 }
 
 .form {
