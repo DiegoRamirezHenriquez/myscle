@@ -15,7 +15,7 @@
 }
 
 .profile-content {
-    width: 25%;
+    width: 28%;
     text-align: center;
     position: sticky;
     top: 0;
@@ -134,3 +134,50 @@ button[name="publicar"]:hover {
     transition-duration: .3s;
     box-shadow: 2px 2px 0px #286168;
   }
+
+  @media screen and (max-width: 1350px) {
+    .btn-edit-profile {
+        width: 60%;
+    }
+    
+  }
+
+    @media screen and (max-width: 768px) {
+        .profile-container-info {
+            flex-direction: column;
+            display: flex;
+            align-items: center;
+        }
+        .profile-content {
+            width: 90%;
+            height: auto;
+            position: relative;
+            padding: 10%;
+            margin: 20px;
+        }
+        .profile-content h1{
+            display: none;
+        }
+        .profile-info{
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            justify-content: space-evenly;
+        }
+        .profile-data p{
+            display: none;
+        }
+        .edit-profile-form {
+            width: 90%;
+        }
+        .profile-img img {
+            border: 1px solid #02b03a;
+            margin-bottom: 10px;
+            width: 50px;
+            height: 50px;
+        }
+        
+        .btn-edit-profile {
+            width: 60%;
+        }
+    }

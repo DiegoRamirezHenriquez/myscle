@@ -1,5 +1,5 @@
 <?php
-include("templates/header.php");
+include("layout/header.php");
 include("conexion.php");
 $mensaje = "";
 if(isset($_POST['login'])){
@@ -8,14 +8,12 @@ if(isset($_POST['login'])){
   $query="SELECT * FROM usuarios WHERE email='$email' AND password='$password'";
   $result=mysqli_query($conn, $query);
   if(mysqli_num_rows($result)>0){
+      session_start();
+      $_SESSION['email'] = $email;
       header("Location: profile.php");
   }else{
       $mensaje = "Correo o contraseña incorrectos";
   }
-  //crear sesion
-  session_start();
-  $_SESSION['email'] = $email;
-
 }
 ?>
 <div id="form-ui">
@@ -27,10 +25,10 @@ if(isset($_POST['login'])){
             </div>
             <div id="input-area">
               <div class="form-inp">
-                <input placeholder="Correo electronico" type="text" name="email">
+                <input placeholder="Correo electronico" type="mail" name="email" maxlength="254">
               </div>
               <div class="form-inp">
-                <input placeholder="Contraseña" type="password" name="password">
+                <input placeholder="Contraseña" type="password" name="password" maxlength="254">
               </div>
             </div>
             <div id="submit-button-cvr">
@@ -45,12 +43,8 @@ if(isset($_POST['login'])){
           </div>
         </form>
 </div>
-<?php
-
-
-?>
 
 
 <?php
-include("templates/footer.php");
+include("layout/footer.php");
 ?>

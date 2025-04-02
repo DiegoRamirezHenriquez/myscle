@@ -1,5 +1,5 @@
 <?php
-include("templates/header.php");
+include("layout/header.php");
 include("conexion.php");
 
 if(isset($_SESSION['email'])){
@@ -7,7 +7,7 @@ if(isset($_SESSION['email'])){
 }else{
     header("Location: login.php");
     exit();
-}
+};
 $isLoggedIn = isset($email);
 $query = "SELECT * FROM usuarios WHERE email='$email'";
 $result = mysqli_query($conn, $query);
@@ -50,7 +50,7 @@ if(isset($_POST['save-edit'])){
             }
         }
         
-
+        
         $target_dir = "images/users/";
         $imageFileType = strtolower(pathinfo($image_user, PATHINFO_EXTENSION));
         $new_image_name = $id . "_" . time() . "." . $imageFileType;
@@ -86,12 +86,10 @@ if(isset($_POST['goto-edit-perfil'])){
 
 if(isset($_POST['cancel-edit'])){
     $_SESSION['edit_mode']=false;
-    header("Location: profile.php");
-    exit();
 }
 
-
 $edit_mode = isset($_SESSION['edit_mode']) ? $_SESSION['edit_mode'] : false;
+
 
 
 if(isset($_POST['publicar'])){
@@ -194,23 +192,25 @@ if(isset($_POST['publicar'])){
             }
         }
         </script>
-        <div class="edit-profile-data">
-            <h2><?php echo $name; ?></h2>
-            <p>Edad: <input type="text" name="age" value="<?php echo $age; ?>"></p>
-            <p>Genero: 
-            <select name="gender">
-            <option value="masculino" <?php if($gender == 'masculino') echo 'selected'; ?>>Masculino</option>
-            <option value="femenino" <?php if($gender == 'femenino') echo 'selected'; ?>>Femenino</option>
-            <option value="otro" <?php if($gender == 'otro') echo 'selected'; ?>>Otro</option>
-            </select>
-            </p>
-            <p>Altura: <input type="text" name="height" value="<?php echo $height; ?>"></p>
-            <p>Peso: <input type="text" name="weight" value="<?php echo $weight; ?>"></p>
-        </div>
-        <div class="edit-profile-options">
-            <button type="submit" name="save-edit" class="btn-save-profile">Guardar cambios</button>
-            <button type="submit" name="cancel-edit" class="btn-cancel-profile">Cancelar</button>
-        </div>
+            <div class="edit-profile-data">
+                <h2><?php echo $name; ?></h2>
+                <p>Edad: <input type="text" name="age" value="<?php echo $age; ?>"></p>
+                <p>Genero: 
+                <select name="gender">
+                <option value="masculino" <?php if($gender == 'masculino') echo 'selected'; ?>>Masculino</option>
+                <option value="femenino" <?php if($gender == 'femenino') echo 'selected'; ?>>Femenino</option>
+                <option value="otro" <?php if($gender == 'otro') echo 'selected'; ?>>Otro</option>
+                </select>
+                </p>
+                <p>Altura: <input type="text" name="height" value="<?php echo $height; ?>"></p>
+                <p>Peso: <input type="text" name="weight" value="<?php echo $weight; ?>"></p>
+            </div>
+            <form method="POST">
+            <div class="edit-profile-options">
+                    <button type="submit" name="save-edit" class="btn-save-profile">Guardar cambios</button>
+                    <button type="submit" name="cancel-edit" class="btn-cancel-profile">Cancelar</button>
+                </div>
+            </form>
         </form>
     <?php }else{ ?>
         <div class="profile-container-info">
@@ -246,7 +246,7 @@ if(isset($_POST['publicar'])){
                 <form method="POST" enctype="multipart/form-data">
                     <div class="post-input-container">
                         <div class="textarea-container">
-                            <textarea name="description" placeholder="Descripción de la publicación" required></textarea>
+                            <textarea name="description" placeholder="Descripción de la publicación" required maxlength="254"></textarea>
                             <label for="files" class="file-upload-label">
                             <i class='bx bx-paperclip bx-rotate-270'></i>
                             </label>
@@ -285,115 +285,202 @@ if(isset($_POST['publicar'])){
                     }
                 </script>
                 <div class="profile-posts">
-                    <?php
-                        $queryName = "SELECT name FROM usuarios WHERE email='$email'";
-                        $resultName = mysqli_query($conn, $queryName);
-                        $name = mysqli_fetch_assoc($resultName)['name'];
-                        $query = "SELECT * FROM users_post WHERE id_usuario='$id'";
-                        $result = mysqli_query($conn, $query);
+                <?php
+                // Obtener el nombre del usuario
+                $queryName = "SELECT name FROM usuarios WHERE email='$email'";
+                $resultName = mysqli_query($conn, $queryName);
 
-                        while($row = mysqli_fetch_assoc($result)){
-                            $post_id = $row['id'];
-                            $description = $row['post'];
-                            $time = $row['time'];
-                            $query = "SELECT * FROM files_post WHERE post_id='$post_id'";
-                            $resultFiles = mysqli_query($conn, $query);
-                            $files = array();
-                            while($rowFiles = mysqli_fetch_assoc($resultFiles)){
-                                $files[] = $rowFiles['files'];
-                            }
-                    ?>
-                    <div class="post">
-                        <div class="post-info">
-                            <div class="post-user">
-                                <?php
-                                    if($rowDetails['image_user'] == ''){
-                                ?>
-                                    <img src="images/icons/usr.png">
-                                <?php }else{ ?>
-                                    <img src="images/users/<?php echo $rowDetails['image_user']; ?>">
-                                <?php } ?>
-                                <h2><a href="#"><?php echo $name ?></a></h2>
-                            </div>
-                            
-                            <p><?php echo $time; ?></p>
-                        </div>
-                        <div class="post-data">
-                            <p><?php echo $description; ?></p>
-                        </div>
-                        <?php if(count($files) > 0){ ?>
-                            <div class="post-img">
-                                <?php foreach($files as $file){ ?>
-                                    <img src="images/post-users/<?php echo $file; ?>" onclick="viewImageFullScreen(this)">
-                                <?php } ?>
-                            </div>
-                        <?php } ?>
-                        <script>
-                            function viewImageFullScreen(img) {
-                                var modal = document.createElement('div');
-                                modal.style.position = 'fixed';
-                                modal.style.top = '0';
-                                modal.style.left = '0';
-                                modal.style.width = '100%';
-                                modal.style.height = '100%';
-                                modal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-                                modal.style.display = 'flex';
-                                modal.style.alignItems = 'center';
-                                modal.style.justifyContent = 'center';
-                                modal.onclick = function() {
-                                    document.body.removeChild(modal);
-                                };
+                if (!$resultName) {
+                    die("Error en la consulta del nombre: " . mysqli_error($conn));
+                }
 
-                                var fullImg = document.createElement('img');
-                                fullImg.src = img.src;
-                                fullImg.style.maxWidth = '90%';
-                                fullImg.style.maxHeight = '90%';
+                $name = mysqli_fetch_assoc($resultName)['name'];
 
-                                modal.appendChild(fullImg);
-                                document.body.appendChild(modal);
-                            }
-                        </script>
-                        <div class="post-options">
-                            <div class="post-buttons">
-                                <button class="btn-like">
-                                    <i class='bx bx-heart' style='color:#02b03a' ></i>
-                                    <!-- si tiene el like que salga este
-                                     <i class='bx bxs-heart' style='color:#02b03a' ></i>
-                                    -->
-                                </button>
-                                <button class="btn-comment">
-                                    <i class='bx bxs-comment' style='color:#02b03a' ></i>
-                                </button>
+                // Consultar publicaciones del usuario
+                $query = "SELECT * FROM users_post WHERE id_usuario='$id'";
+                $result = mysqli_query($conn, $query);
+
+                if (!$result) {
+                    die("Error en la consulta de publicaciones: " . mysqli_error($conn));
+                }
+
+                if (mysqli_num_rows($result) > 0) {
+                    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                        $post_id = $row['id'];
+                        $description = $row['post'];
+                        $time = $row['time'];
+
+                        // Consultar archivos asociados a la publicación
+                        $queryFiles = "SELECT * FROM files_post WHERE post_id='$post_id'";
+                        $resultFiles = mysqli_query($conn, $queryFiles);
+
+                        if (!$resultFiles) {
+                            die("Error en la consulta de archivos: " . mysqli_error($conn));
+                        }
+
+                        $files = [];
+                        while ($rowFiles = mysqli_fetch_assoc($resultFiles)) {
+                            $files[] = $rowFiles['files'];
+                        }
+                        ?>
+                        <div class="post" id="post-<?php echo $post_id; ?>">
+                            <div class="post-info">
+                                <div class="post-user">
+                                    <?php if (empty($rowDetails['image_user'])) { ?>
+                                        <img src="images/icons/usr.png">
+                                    <?php } else { ?>
+                                        <img src="images/users/<?php echo $rowDetails['image_user']; ?>">
+                                    <?php } ?>
+                                    <h2><a href="#"><?php echo $name; ?></a></h2>
+                                </div>
+                                <p><?php echo $time; ?></p>
                             </div>
-                            <div class="dropdown">
-                                <button class="dropbtn">
-                                    <i class='bx bx-dots-vertical-rounded' style='color:#02b03a' ></i>
-                                </button>
-                                <div class="dropdown-content">
-                                    <form method="POST" action="actions/edit_post.php">
-                                        <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
-                                        <button type="submit" name="edit-post">Editar</button>
-                                    </form>
-                                    <form method="POST" action="actions/delete_post.php">
-                                        <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
-                                        <button type="submit" name="delete-post">Borrar</button>
-                                    </form>
+                            <div class="post-data">
+                                <p><?php echo $description; ?></p>
+                            </div>
+                            <?php if (count($files) > 0) { ?>
+                                <div class="post-img">
+                                    <?php foreach ($files as $file) { ?>
+                                        <img src="images/post-users/<?php echo $file; ?>" onclick="viewImageFullScreen(this)">
+                                    <?php } ?>
+                                </div>
+                            <?php } ?>
+                            <script>
+                                function viewImageFullScreen(img) {
+                                    var modal = document.createElement('div');
+                                    modal.style.position = 'fixed';
+                                    modal.style.top = '0';
+                                    modal.style.left = '0';
+                                    modal.style.width = '100%';
+                                    modal.style.height = '100%';
+                                    modal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                                    modal.style.display = 'flex';
+                                    modal.style.alignItems = 'center';
+                                    modal.style.justifyContent = 'center';
+                                    modal.onclick = function () {
+                                        document.body.removeChild(modal);
+                                    };
+
+                                    var fullImg = document.createElement('img');
+                                    fullImg.src = img.src;
+                                    fullImg.style.maxWidth = '90%';
+                                    fullImg.style.maxHeight = '90%';
+
+                                    modal.appendChild(fullImg);
+                                    document.body.appendChild(modal);
+                                }
+                            </script>
+                            <div class="post-options">
+                                <div class="post-buttons">
+                                    <?php
+                                    // Consultar si el usuario ha dado like
+                                    $queryLike = "SELECT * FROM post_likes WHERE post_id='$post_id' AND user_id='$id'";
+                                    $resultLike = mysqli_query($conn, $queryLike);
+
+                                    if (!$resultLike) {
+                                        die("Error en la consulta de likes: " . mysqli_error($conn));
+                                    }
+
+                                    $liked = mysqli_num_rows($resultLike) > 0;
+
+                                    // Contar número de likes
+                                    $queryCountLikes = "SELECT COUNT(*) AS total_likes FROM post_likes WHERE post_id='$post_id'";
+                                    $resultCountLikes = mysqli_query($conn, $queryCountLikes);
+
+                                    if (!$resultCountLikes) {
+                                        die("Error al contar likes: " . mysqli_error($conn));
+                                    }
+
+                                    $countLikes = mysqli_fetch_assoc($resultCountLikes)['total_likes'];
+                                    ?>
+                                    <button class="btn-like" onclick="toggleLike(<?php echo $post_id; ?>)">
+                                        <i class='bx <?php echo $liked ? 'bxs-heart' : 'bx-heart'; ?>' style='color:#02b03a'></i>
+                                    </button>
+                                    <span style="color:#02b03a;" id="like-count-<?php echo $post_id; ?>"><?php echo $countLikes; ?></span>
+                                    <button class="btn-comment">
+                                        <i class='bx bxs-comment' style='color:#02b03a'></i>
+                                    </button>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="dropbtn">
+                                        <i class='bx bx-dots-vertical-rounded' style='color:#02b03a'></i>
+                                    </button>
+                                    <div class="dropdown-content">
+                                        <button onclick="editPost(<?php echo $post_id; ?>)">
+                                            <i class='bx bxs-pencil' style='color:#02b03a'></i> Editar
+                                        </button>
+                                        <form action="actions/delete_post.php" method="POST">
+                                            <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
+                                            <button type="submit" name="delete-post">
+                                                <i class='bx bxs-trash' style='color:#02b03a'></i> Borrar
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                            <style>
-                                
-                            </style>
-
+                            <hr style="color: #164B60; width: 100%;">
                         </div>
-                        <hr style="color: #164B60; width: 100%; ">
-                    </div>
-                    <?php } ?>
-                </div>
-                    
-                </div>
-            </div>
-        </div>
-        
-    <?php } ?>
+                    <?php
+                        }
+                    }
+                }
+                ?>
+                <script>
+                    function toggleLike(postId) {
+                        var likeButton = document.querySelector('#post-' + postId + ' .btn-like i');
+                        var liked = likeButton.classList.contains('bxs-heart');
+                        var formData = new FormData();
+                        formData.append('post_id', postId);
+                        formData.append('user_id', <?php echo $id; ?>);
+
+                        sendLikeRequest(formData, postId, liked);
+                    }
+
+                    function sendLikeRequest(formData, postId, liked) {
+                        fetch('like_post.php', {
+                            method: 'POST',
+                            body: formData
+                        }).then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        }).then(data => {
+                            if (!data.success) {
+                                throw new Error(data.message || 'Error en la solicitud');
+                            }
+                            var likeButton = document.querySelector('#post-' + postId + ' .btn-like i');
+                            var likeCountSpan = document.getElementById('like-count-' + postId);
+                            if (liked) {
+                                likeButton.classList.remove('bxs-heart');
+                                likeButton.classList.add('bx-heart');
+                                likeCountSpan.textContent = parseInt(likeCountSpan.textContent) - 1;
+                            } else {
+                                likeButton.classList.remove('bx-heart');
+                                likeButton.classList.add('bxs-heart');
+                                likeCountSpan.textContent = parseInt(likeCountSpan.textContent) + 1;
+                            }
+                        }).catch(error => {
+                            console.error('Error:', error);
+                            showNotification('Error al procesar la solicitud. Por favor, inténtelo de nuevo más tarde.', 'error');
+                        });
+                    }
+
+                    function editPost(postId) {
+                        // Implementar la lógica para editar la publicación
+                        
+                    }
+
+                    function showNotification(message, type) {
+                        var notification = document.createElement('div');
+                        notification.className = 'notification ' + type;
+                        notification.textContent = message;
+                        document.body.appendChild(notification);
+                        setTimeout(function() {
+                            notification.remove();
+                        }, 3000);
+                    }
+                </script>
 </div>
-<?php include("templates/footer.php"); ?>
+<?php include("layout/footer.php"); ?>
+

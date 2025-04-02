@@ -1,6 +1,6 @@
 
 .form-ui {
-    height: 92vh;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,8 +14,8 @@
     justify-items: center;
     align-items: center;
     width: 300px;
-    height: 550px;
-    padding: 25px;
+  height: 472px;
+  padding: 25px;
     background-color: #1B6B93;
     outline: 1px solid #A2FF86;
     border-radius: 10px;

@@ -1,5 +1,5 @@
 <?php
-include("templates/header.php");
+include("layout/header.php");
 include("conexion.php");
 $mensaje = "";
 if(isset($_POST['register'])){
@@ -35,13 +35,13 @@ if(isset($_POST['register'])){
             </div>
             <div class="input-area">
               <div class="form-inp">
-                <input placeholder="Correo electronico" type="text" name="email">
+                <input placeholder="Correo electronico" type="text" name="email" maxlength="254">
               </div>
               <div class="form-inp">
-                <input placeholder="Nombre" type="text" name="name">
+                <input placeholder="Nombre" type="text" name="name" maxlength="254">
               </div>
               <div class="form-inp">
-                <input placeholder="Contraseña" type="password" name="password">
+                <input placeholder="Contraseña" type="password" name="password" maxlength="254">
               </div>
             </div>
             <div class="submit-button-cvr">
@@ -61,5 +61,5 @@ if(isset($_POST['register'])){
 
 <?php
 
-include("templates/footer.php")
+include("layout/footer.php")
 ?>
