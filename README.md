@@ -21,7 +21,7 @@ Myscle es una aplicación que permite a los usuarios interactuar con otras perso
 1. Clonar el repositorio:
 
    ```bash
-   git clone https://github.com/DiegoRamirez/myscle.git
+   git clone https://github.com/DiegoRamirezHenriquez/myscle.git
    ```
 
 2. Configurar la base de datos:
