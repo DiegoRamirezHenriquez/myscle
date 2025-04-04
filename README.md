@@ -41,16 +41,6 @@ Myscle es una aplicación que permite a los usuarios interactuar con otras perso
 
    - Con `localhost/myscle/index.php`
 
-## Contribución
-
-Si deseas contribuir a Myscle, sigue estos pasos:
-
-1. Realiza un fork del repositorio
-2. Crea una rama con tu nueva funcionalidad (`git checkout -b feature/nueva-funcionalidad`)
-3. Realiza los cambios y haz commit (`git commit -m 'Agregada nueva funcionalidad'`)
-4. Sube los cambios a tu repositorio (`git push origin feature/nueva-funcionalidad`)
-5. Crea un Pull Request
-
 ## Licencia
 
 Este proyecto está bajo la licencia MIT. Ver el archivo `LICENSE` para más detalles.
