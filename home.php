@@ -10,16 +10,27 @@ if(isset($_SESSION['email'])){
 
 ?>
 <div class="home-container">
-    <div class="profile-posts-container">
+    <div class="profile-posts-container" id="profile-posts-container">
         <?php
         $queryID = "SELECT id FROM usuarios WHERE email = '$email'";
         $resultID = mysqli_query($conn, $queryID);
         $idNow = mysqli_fetch_assoc($resultID)['id'];
         
 
-        $query_posts = "SELECT * FROM users_post WHERE id_usuario IN (SELECT followed_id FROM follows WHERE follower_id = (SELECT id FROM usuarios WHERE email = '$email')) ORDER BY time DESC";
-        if ($result_posts = mysqli_query($conn, $query_posts)) {
-            while($post = mysqli_fetch_assoc($result_posts)) {
+        $query_posts = "SELECT * FROM users_post 
+    WHERE id_usuario IN (
+        SELECT followed_id FROM follows 
+        WHERE follower_id = (
+            SELECT id FROM usuarios WHERE email = '$email'
+        )
+    ) 
+    ORDER BY time DESC";
+
+$result_posts = mysqli_query($conn, $query_posts);
+
+// Validación correcta
+if ($result_posts && mysqli_num_rows($result_posts) > 0) {
+    while ($post = mysqli_fetch_assoc($result_posts)) {
                 ?>
                 <div class="post" id="post-<?php echo $post['id']; ?>">
                                 <div class="post-info">
@@ -131,8 +142,21 @@ if(isset($_SESSION['email'])){
                 <?php
             }
         } else {
-            echo "<p>No hay publicaciones.</p>";
+            ?>
+            <script>
+                let editDiv = document.getElementById('profile-posts-container');
+
+                editDiv.style.textAlign="center";
+            </script>
+        <?php
+            echo "
+             <hr style='color: #164B60; width: 100%;'>
+            <p>No hay publicaciones.</p> <br>
+            <p>Sigue a mas personas <a href='explorar.php' style='color:white'>Aqui en explorar</a></p>
+            <hr style='color: #164B60; width: 100%;'>
+            ";
         }
+        
         ?>
     </div>
 

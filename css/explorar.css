@@ -1,0 +1,46 @@
+.contenedor-explorar{
+    min-height: 100vh;
+    background-color: #2f7192;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.contenedor-opciones-explorar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: #02b03a;
+    width: 25%;
+    padding: .1rem;
+    border-radius: 12px;
+    margin: .3rem;
+}
+.opciones-explorar{
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+.opciones-explorar:hover{
+    background-color: #027d2971 !important;
+}
+.contenedor-publicaciones-gustados{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.post-explorar {
+    width: 90%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.post-info-explorar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.post-info-explorar p {
+    font-size: 13px;
+    color: #939393;
+}

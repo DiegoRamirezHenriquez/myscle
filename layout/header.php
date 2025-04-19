@@ -22,6 +22,7 @@ $isLoggedIn = isset($email);
     <link rel="stylesheet" href="css/home.css">
     <link rel="stylesheet" href="css/posts.css">
     <link rel="stylesheet" href="css/rutinas.css">
+    <link rel="stylesheet" href="css/explorar.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
@@ -32,7 +33,7 @@ $isLoggedIn = isset($email);
         <ul class="categorias">
             <li><a href="profile.php">PERFIL</a></li>
             <li><a href="home.php">HOME</a></li>
-            <!-- <li><a href="rutinas.php">RUTINAS</a></li> -->
+            <li><a href="explorar.php">EXPLORAR</a></li>
         </ul>
         <?php if(!$isLoggedIn){ ?>
         <ul class="btns-registro-ingreso">
