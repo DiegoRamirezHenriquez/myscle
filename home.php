@@ -49,7 +49,7 @@ if ($result_posts && mysqli_num_rows($result_posts) > 0) {
     
                                         $name = mysqli_fetch_assoc($resultName)['name'];
                                         ?>
-                                        <h2><a href="#"><?php echo $name; ?></a></h2>
+                                        <h2><a href="perfiles.php?id=<?php  echo $post['id_usuario']  ?>"><?php echo $name; ?></a></h2>
                                     </div>
                                     <p><?php echo $post['time']; ?></p>
                                 </div>

@@ -13,8 +13,7 @@ Myscle es una aplicación que permite a los usuarios interactuar con otras perso
 ## Tecnologías Utilizadas
 
 - **Frontend**: HTML, CSS, JavaScript
-- **Backend**: PHP
-- **Base de datos**: MySQL
+- **Backend**: PHP, MySQL
 
 ## Instalación
 
@@ -35,7 +34,7 @@ Myscle es una aplicación que permite a los usuarios interactuar con otras perso
 
 4. Iniciar el servidor local:
 
-   - Iniciar el servidor ya sea por XAMPP o con WAMP
+   - Iniciar el servidor ya sea por XAMPP u otro servidor que desee
 
 5. Acceder a la aplicación en el navegador:
 

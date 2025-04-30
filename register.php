@@ -19,6 +19,17 @@ if(isset($_POST['register'])){
     if($result){
       session_start();
       $_SESSION['email'] = $email;
+      $selectIdQuery = "SELECT id FROM usuarios WHERE email='$email'";
+      $selectIdResult = mysqli_query($conn, $selectIdQuery);
+      $row = mysqli_fetch_assoc($selectIdResult);
+      $idUser = $row['id'];
+      $query2="INSERT INTO details_usuarios(gender, weight, height, id_usuarios, age, image_user) VALUES ('otro', '0', '0', $idUser, '0', null)";
+      $result2 = mysqli_query($conn, $query2);
+      if($result2){
+        $mensaje = "Usuario registrado correctamente";
+      } else {
+        $mensaje = "Error al registrar detalles del usuario";
+      }
       header("Location: profile.php");
     } else {
       $mensaje = "Error al registrar usuario";

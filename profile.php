@@ -32,112 +32,108 @@ if(!$rowDetails){
     $info = true;
 }
 
-if(isset($_POST['save-edit'])){
+if(isset($_POST['save-edit'])) {
     $age = !empty($_POST['age']) ? $_POST['age'] : null;
     $gender = !empty($_POST['gender']) ? $_POST['gender'] : null;
     $height = !empty($_POST['height']) ? $_POST['height'] : null;
     $weight = !empty($_POST['weight']) ? $_POST['weight'] : null;
     $image_user = !empty($_FILES['image_user']['name']) ? $_FILES['image_user']['name'] : null;
+
     if ($image_user) {
         $query = "SELECT image_user FROM details_usuarios WHERE id_usuarios='$id'";
         $result = mysqli_query($conn, $query);
         $row = mysqli_fetch_assoc($result);
-        
-        if ($row && $row['image_user']  ) {
+
+        if ($row && $row['image_user']) {
             $old_image = "images/users/" . $row['image_user'];
             if (file_exists($old_image)) {
                 unlink($old_image);
             }
         }
-        
-        
+
         $target_dir = "images/users/";
         $imageFileType = strtolower(pathinfo($image_user, PATHINFO_EXTENSION));
         $new_image_name = $id . "_" . time() . "." . $imageFileType;
         $target_file = $target_dir . $new_image_name;
-        if(move_uploaded_file($_FILES["image_user"]["tmp_name"], $target_file)){
-            $query = "UPDATE details_usuarios SET age='$age', gender = '$gender', height='$height', weight='$weight', image_user='$new_image_name' WHERE id_usuarios='$id'";
-        }else{
+
+        if (move_uploaded_file($_FILES["image_user"]["tmp_name"], $target_file)) {
+            $query = "UPDATE details_usuarios SET age='$age', gender='$gender', height='$height', weight='$weight', image_user='$new_image_name' WHERE id_usuarios='$id'";
+        } else {
             echo "Error al subir la imagen";
+            exit();
         }
     } else {
-        $query = "SELECT image_user FROM details_usuarios WHERE id_usuarios='$id'";
-        $result = mysqli_query($conn, $query);
-        $row = mysqli_fetch_assoc($result);
-        $new_image_name = $row['image_user'];
+        $query = "UPDATE details_usuarios SET age='$age', gender='$gender', height='$height', weight='$weight' WHERE id_usuarios='$id'";
     }
-    
-    if ($info) {
-        $query = "UPDATE details_usuarios SET age='$age', gender='$gender', height='$height', weight='$weight', image_user='$new_image_name' WHERE id_usuarios='$id'";
-    } else {
-        $query = "INSERT INTO details_usuarios (gender, weight, height, age, id_usuarios, image_user) VALUES ('$gender', '$weight', '$height', '$age', '$id', '$new_image_name')";
-    }
+
     $result = mysqli_query($conn, $query);
+
     if ($result) {
         $_SESSION['edit_mode'] = false;
         header("Location: profile.php");
+        exit();
     } else {
         echo "Error al guardar los datos";
     }
 }
-if(isset($_POST['goto-edit-perfil'])){
+
+if(isset($_POST['goto-edit-perfil'])) {
     $_SESSION['edit_mode'] = true;
 }
 
-if(isset($_POST['cancel-edit'])){
-    $_SESSION['edit_mode']=false;
+if(isset($_POST['cancel-edit'])) {
+    $_SESSION['edit_mode'] = false;
 }
 
 $edit_mode = isset($_SESSION['edit_mode']) ? $_SESSION['edit_mode'] : false;
 
-
-
-if(isset($_POST['publicar'])){
+if(isset($_POST['publicar'])) {
     $description = $_POST['description'];
     $files = $_FILES['files'];
     $query = "INSERT INTO users_post (post, id_usuario, time) VALUES ('$description', '$id', NOW())";
 
     $result = mysqli_query($conn, $query);
 
-    if($result){
+    if($result) {
         $last_id = mysqli_insert_id($conn);
         $target_dir = "images/post-users/";
-        $query = "SELECT * FROM users_post WHERE id='$last_id'";
-        $result = mysqli_query($conn, $query);
-        $row = mysqli_fetch_assoc($result);
-        $post_id = $row['id'];
         $post_images = array();
-        for($i = 0; $i < count($files['name']); $i++){
+
+        for($i = 0; $i < count($files['name']); $i++) {
             if ($files['name'][$i]) {
                 $imageFileType = strtolower(pathinfo($files['name'][$i], PATHINFO_EXTENSION));
-                $new_image_name = $post_id . "_" . $i . "." . $imageFileType;
+                $new_image_name = $last_id . "_" . $i . "." . $imageFileType;
                 $target_file = $target_dir . $new_image_name;
                 move_uploaded_file($files["tmp_name"][$i], $target_file);
                 $post_images[] = $new_image_name;
             }
         }
+
         if (!empty($post_images)) {
             $query = "INSERT INTO files_post (post_id, files) VALUES ";
-            foreach($post_images as $image){
-                $query .= "('$post_id', '$image'),";
+            foreach($post_images as $image) {
+                $query .= "('$last_id', '$image'),";
             }
-            $query = substr($query, 0, -1);
+            $query = rtrim($query, ',');
             $result = mysqli_query($conn, $query);
-            if($result){
+
+            if($result) {
                 header("Location: profile.php");
-            }else{
+                exit();
+            } else {
                 echo "Error al subir las imágenes";
             }
         } else {
             header("Location: profile.php");
+            exit();
         }
-    }else{
+    } else {
         echo "Error al publicar";
     }
 }
 ?>
 <div class="profile-container">
-    <?php if($edit_mode){ ?>
+    <?php if($edit_mode) { ?>
         <div class="edit-profile-container">
             <h1>Editar perfil</h1>
             <form method="POST" enctype="multipart/form-data">
@@ -145,73 +141,48 @@ if(isset($_POST['publicar'])){
                     <div class="edit-profile-img">
                         <input type="file" name="image_user" accept="image/*" onchange="previewImage(this)">
                         <div id="image-preview-edit">
-                        <?php if($rowDetails && $rowDetails['image_user']){ ?>
+                        <?php if($rowDetails && $rowDetails['image_user']) { ?>
                             <img src="images/users/<?php echo $rowDetails['image_user']; ?>" alt="Profile Image" style="width: 20%;">
-                            <form method="POST">
-                                <button type="submit" name="delete-image" class="btn-delete-image">Eliminar imagen</button>
-                            </form>
                         <?php } ?>
                         </div>
                     </div>
                 </div>
-            <?php 
-            if(isset($_POST['delete-image'])){
-                $query = "SELECT image_user FROM details_usuarios WHERE id_usuarios='$id'";
-                $result = mysqli_query($conn, $query);
-                $row = mysqli_fetch_assoc($result);
-                if ($row && $row['image_user']) {
-                    $old_image = "images/users/" . $row['image_user'];
-                    if (file_exists($old_image)) {
-                        unlink($old_image);
+                <script>
+                function previewImage(input) {
+                    var preview = document.getElementById('image-preview-edit');
+                    preview.innerHTML = '';
+                    var file = input.files[0];
+                    if (file) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            var img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.style.width = '20%';
+                            preview.appendChild(img);
+                        }
+                        reader.readAsDataURL(file);
                     }
                 }
-                $query = "UPDATE details_usuarios SET image_user='' WHERE id_usuarios='$id'";
-                $result = mysqli_query($conn, $query);
-                if ($result) {
-                    header("Location: profile.php");
-                } else {
-                    echo "Error al eliminar la imagen";
-                }
-            }
-            ?>
-    
-        <script>
-        function previewImage(input) {
-            var preview = document.getElementById('image-preview-edit');
-            preview.innerHTML = '';
-            var file = input.files[0];
-            if (file) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    var img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.style.width = '20%';
-                    preview.appendChild(img);
-                }
-                reader.readAsDataURL(file);
-            }
-        }
-        </script>
-            <div class="edit-profile-data">
-                <h2><?php echo $name; ?></h2>
-                <p>Edad: <input type="text" name="age" value="<?php echo $age; ?>"></p>
-                <p>Genero: 
-                <select name="gender">
-                <option value="masculino" <?php if($gender == 'masculino') echo 'selected'; ?>>Masculino</option>
-                <option value="femenino" <?php if($gender == 'femenino') echo 'selected'; ?>>Femenino</option>
-                <option value="otro" <?php if($gender == 'otro') echo 'selected'; ?>>Otro</option>
-                </select>
-                </p>
-                <p>Altura: <input type="text" name="height" value="<?php echo $height; ?>"></p>
-                <p>Peso: <input type="text" name="weight" value="<?php echo $weight; ?>"></p>
-            </div>
-            <form method="POST">
-            <div class="edit-profile-options">
+                </script>
+                <div class="edit-profile-data">
+                    <h2><?php echo $name; ?></h2>
+                    <p>Edad: <input type="text" name="age" value="<?php echo $age; ?>"></p>
+                    <p>Genero: 
+                    <select name="gender">
+                        <option value="masculino" <?php if($gender == 'masculino') echo 'selected'; ?>>Masculino</option>
+                        <option value="femenino" <?php if($gender == 'femenino') echo 'selected'; ?>>Femenino</option>
+                        <option value="otro" <?php if($gender == 'otro') echo 'selected'; ?>>Otro</option>
+                    </select>
+                    </p>
+                    <p>Altura: <input type="text" name="height" value="<?php echo $height; ?>"></p>
+                    <p>Peso: <input type="text" name="weight" value="<?php echo $weight; ?>"></p>
+                </div>
+                <div class="edit-profile-options">
                     <button type="submit" name="save-edit" class="btn-save-profile">Guardar cambios</button>
                     <button type="submit" name="cancel-edit" class="btn-cancel-profile">Cancelar</button>
                 </div>
             </form>
-        </form>
+        </div>
     <?php }else{ ?>
         <div class="profile-container-info">
             <div class="profile-content">

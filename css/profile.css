@@ -135,6 +135,10 @@ button[name="publicar"]:hover {
     box-shadow: 2px 2px 0px #286168;
   }
 
+.info-externo{
+    min-width:78% !important;
+
+}
   @media screen and (max-width: 1350px) {
     .btn-edit-profile {
         width: 60%;
@@ -149,7 +153,7 @@ button[name="publicar"]:hover {
             align-items: center;
         }
         .profile-content {
-            width: 90%;
+            width: 100%;
             height: auto;
             position: relative;
             padding: 10%;
@@ -163,9 +167,6 @@ button[name="publicar"]:hover {
             flex-direction: row;
             gap: 10px;
             justify-content: space-evenly;
-        }
-        .profile-data p{
-            display: none;
         }
         .edit-profile-form {
             width: 90%;

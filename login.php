@@ -10,6 +10,7 @@ if(isset($_POST['login'])){
   if(mysqli_num_rows($result)>0){
       session_start();
       $_SESSION['email'] = $email;
+      
       header("Location: profile.php");
   }else{
       $mensaje = "Correo o contraseña incorrectos";
