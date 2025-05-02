@@ -43,7 +43,7 @@ $idUsuario = $row['id'];
                         $files[] = $postExplorarFiles['files'];
                     }
                     ?>
-                        <div class="post-explorar" id="post-<?php echo $post_id; ?>">
+                        <div class="post-explorar" id="post-<?php echo $post_id; ?>-gustados">
                             <div class="post-info-explorar">
                                 <div class="post-user">
                                     <?php if (empty($postExplorarDetails['image_user'])) { ?>
@@ -88,10 +88,10 @@ $idUsuario = $row['id'];
 
                                     $countLikes = mysqli_fetch_assoc($resultCountLikes)['total_likes'];
                                     ?>
-                                    <button class="btn-like" onclick="toggleLike(<?php echo $post_id; ?>)">
+                                    <button class="btn-like" onclick="toggleLike(<?php echo $post_id; ?>, 'gustados')">
                                         <i class='bx <?php echo $liked ? 'bxs-heart' : 'bx-heart'; ?>' style='color:#02b03a'></i>
                                     </button>
-                                    <span style="color:#02b03a;" id="like-count-<?php echo $post_id; ?>"><?php echo $countLikes; ?></span>
+                                    <span style="color:#02b03a;" id="like-count-<?php echo $post_id; ?>-gustados"><?php echo $countLikes; ?></span>
                                     <button class="btn-comment">
                                         <i class='bx bxs-comment' style='color:#02b03a'></i>
                                     </button>
@@ -124,7 +124,7 @@ $idUsuario = $row['id'];
                         $files[] = $postExplorarFiles['files'];
                     }
                     ?>
-                        <div class="post-explorar" id="post-<?php echo $post_id; ?>">
+                        <div class="post-explorar" id="post-<?php echo $post_id . "-nuevos"; ?>">
                             <div class="post-info-explorar">
                                 <div class="post-user">
                                     <?php if (empty($postExplorarDetails['image_user'])) { ?>
@@ -193,11 +193,13 @@ $idUsuario = $row['id'];
                                     }
 
                                     $countLikes = mysqli_fetch_assoc($resultCountLikes)['total_likes'];
+
+                                    $postIDCheck = $post_id . "-nuevos"; // Cambié el nombre de la variable para evitar conflictos
                                     ?>
-                                    <button class="btn-like" onclick="toggleLike(<?php echo $post_id; ?>)">
+                                    <button class="btn-like" onclick="toggleLike(<?php echo $post_id; ?>, 'nuevos')">
                                         <i class='bx <?php echo $liked ? 'bxs-heart' : 'bx-heart'; ?>' style='color:#02b03a'></i>
                                     </button>
-                                    <span style="color:#02b03a;" id="like-count-<?php echo $post_id; ?>"><?php echo $countLikes; ?></span>
+                                    <span style="color:#02b03a;" id="like-count-<?php echo $post_id; ?>-nuevos"><?php echo $countLikes; ?></span>
                                     <button class="btn-comment">
                                         <i class='bx bxs-comment' style='color:#02b03a'></i>
                                     </button>
@@ -276,10 +278,10 @@ $idUsuario = $row['id'];
 
                                     $countLikes = mysqli_fetch_assoc($resultCountLikes)['total_likes'];
                                     ?>
-                                    <button class="btn-like" onclick="toggleLike(<?php echo $post_id; ?>)">
+                                    <button class="btn-like" onclick="toggleLike(<?php echo $post_id; ?>, 'siguiendo')">
                                         <i class='bx <?php echo $liked ? 'bxs-heart' : 'bx-heart'; ?>' style='color:#02b03a'></i>
                                     </button>
-                                    <span style="color:#02b03a;" id="like-count-<?php echo $post_id; ?>"><?php echo $countLikes; ?></span>
+                                    <span style="color:#02b03a;" id="like-count-<?php echo $post_id; ?>-siguiendo"><?php echo $countLikes; ?></span>
                                     <button class="btn-comment">
                                         <i class='bx bxs-comment' style='color:#02b03a'></i>
                                     </button>
@@ -313,15 +315,15 @@ $idUsuario = $row['id'];
         });
     });
 
-    function toggleLike(postId) {
-        var likeButton = document.querySelector('#post-' + postId + ' .btn-like i');
+    function toggleLike(postId, section) {
+        var likeButton = document.querySelector('#post-' + postId + '-' + section + ' .btn-like i');
         var liked = likeButton.classList.contains('bxs-heart');
         var formData = new FormData();
         formData.append('post_id', postId);
         formData.append('user_id', <?php echo $idUsuario; ?>);
-        sendLikeRequest(formData, postId, liked);
+        sendLikeRequest(formData, postId, liked, section);
     }
-    function sendLikeRequest(formData, postId, liked) {
+    function sendLikeRequest(formData, postId, liked, section) {
         fetch('like_post.php', {
             method: 'POST',
             body: formData
@@ -334,8 +336,8 @@ $idUsuario = $row['id'];
             if (!data.success) {
                 throw new Error(data.message || 'Error en la solicitud');
             }
-            var likeButton = document.querySelector('#post-' + postId + ' .btn-like i');
-            var likeCountSpan = document.getElementById('like-count-' + postId);
+            var likeButton = document.querySelector('#post-' + postId + '-' + section + ' .btn-like i');
+            var likeCountSpan = document.getElementById('like-count-' + postId + '-' + section);
             if (liked) {
                 likeButton.classList.remove('bxs-heart');
                 likeButton.classList.add('bx-heart');

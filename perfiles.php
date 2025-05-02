@@ -7,10 +7,19 @@ if(isset($_SESSION['email'])){
 }else{
     header("Location: login.php");
 }
+//usuario logueado encontrar id
+$sql = "SELECT id FROM usuarios WHERE email='$email'";
+$result = mysqli_query($conn, $sql);
+if (!$result) {
+    die("Error en la consulta: " . mysqli_error($conn));
+}
+$row = mysqli_fetch_assoc($result);
+$id_usuario = $row['id'];
 $rowDetails;
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']); // Sanitizar ID
 
+    
     // Consultar detalles del usuario
     $sql = "SELECT * FROM details_usuarios WHERE id_usuarios = $id";
     $resultado = $conn->query($sql);
@@ -23,12 +32,11 @@ if (isset($_GET['id'])) {
         $height = isset($rowDetails['height']) ? htmlspecialchars($rowDetails['height'], ENT_QUOTES, 'UTF-8') : 'No especificado';
         $weight = isset($rowDetails['weight']) ? htmlspecialchars($rowDetails['weight'], ENT_QUOTES, 'UTF-8') : 'No especificado';
         $queryName = "SELECT name FROM usuarios WHERE id='$id'";
-                $resultName = mysqli_query($conn, $queryName);
-                if (!$resultName) {
-                    die("Error en la consulta del nombre: " . mysqli_error($conn));
-                }
-
-                $name = mysqli_fetch_assoc($resultName)['name'];
+        $resultName = mysqli_query($conn, $queryName);
+        if (!$resultName) {
+            die("Error en la consulta del nombre: " . mysqli_error($conn));
+        }
+        $name = mysqli_fetch_assoc($resultName)['name'];
 ?>
 <div class="profile-container ">
     <div class="profile-container-info ">
@@ -134,7 +142,7 @@ if (isset($_GET['id'])) {
                                 <div class="post-buttons">
                                     <?php
                                     // Consultar si el usuario ha dado like
-                                    $queryLike = "SELECT * FROM post_likes WHERE post_id='$post_id' AND user_id='$id'";
+                                    $queryLike = "SELECT * FROM post_likes WHERE post_id='$post_id' AND user_id='$id_usuario'";
                                     $resultLike = mysqli_query($conn, $queryLike);
 
                                     if (!$resultLike) {
@@ -142,6 +150,7 @@ if (isset($_GET['id'])) {
                                     }
 
                                     $liked = mysqli_num_rows($resultLike) > 0;
+                                    echo "<script>console.log('Liked: " . ($liked ? 'true' : 'false') . " $id');</script>";
 
                                     // Contar número de likes
                                     $queryCountLikes = "SELECT COUNT(*) AS total_likes FROM post_likes WHERE post_id='$post_id'";

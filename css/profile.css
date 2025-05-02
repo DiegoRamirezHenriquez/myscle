@@ -147,6 +147,11 @@ button[name="publicar"]:hover {
   }
 
     @media screen and (max-width: 768px) {
+        .profile-container {
+            flex-direction: column;
+            align-items: center;
+        }
+        
         .profile-container-info {
             flex-direction: column;
             display: flex;
@@ -156,8 +161,7 @@ button[name="publicar"]:hover {
             width: 100%;
             height: auto;
             position: relative;
-            padding: 10%;
-            margin: 20px;
+            margin-bottom: 20px;
         }
         .profile-content h1{
             display: none;
@@ -165,20 +169,28 @@ button[name="publicar"]:hover {
         .profile-info{
             display: flex;
             flex-direction: row;
-            gap: 10px;
             justify-content: space-evenly;
+            flex-wrap: wrap;
         }
         .edit-profile-form {
             width: 90%;
         }
+        .profile-img {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
         .profile-img img {
             border: 1px solid #02b03a;
             margin-bottom: 10px;
-            width: 50px;
-            height: 50px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
         }
         
         .btn-edit-profile {
             width: 60%;
         }
+
     }
