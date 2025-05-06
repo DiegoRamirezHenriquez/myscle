@@ -35,7 +35,16 @@ if ($result_posts && mysqli_num_rows($result_posts) > 0) {
                 <div class="post" id="post-<?php echo $post['id']; ?>">
                                 <div class="post-info">
                                     <div class="post-user">
-                                        <?php if (empty($rowDetails['image_user'])) { ?>
+                                        <?php 
+                                            // Obtener la imagen del usuario
+                                        $queryDetails = "SELECT image_user FROM details_usuarios WHERE id_usuarios = '$post[id_usuario]'";
+                                        $resultDetails = mysqli_query($conn, $queryDetails);
+                                        if (!$resultDetails) {
+                                            die("Error al consultar la imagen del usuario: " . mysqli_error($conn));
+                                        }
+                                        $rowDetails = mysqli_fetch_assoc($resultDetails);
+
+                                        if (empty($rowDetails['image_user'])) { ?>
                                             <img src="images/icons/usr.png">
                                         <?php } else { ?>
                                             <img src="images/users/<?php echo $rowDetails['image_user']; ?>">
@@ -49,6 +58,7 @@ if ($result_posts && mysqli_num_rows($result_posts) > 0) {
     
                                         $name = mysqli_fetch_assoc($resultName)['name'];
                                         ?>
+                                        
                                         <h2><a href="perfiles.php?id=<?php  echo $post['id_usuario']  ?>"><?php echo $name; ?></a></h2>
                                     </div>
                                     <p><?php echo $post['time']; ?></p>

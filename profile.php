@@ -11,6 +11,9 @@ if(isset($_SESSION['email'])){
 $isLoggedIn = isset($email);
 $query = "SELECT * FROM usuarios WHERE email='$email'";
 $result = mysqli_query($conn, $query);
+if (!$result) {
+    die("Error en la consulta: " . mysqli_error($conn));
+}
 $row = mysqli_fetch_assoc($result);
 
 $name = $row['name'];
@@ -54,13 +57,13 @@ if(isset($_POST['save-edit'])) {
         $target_dir = "images/users/";
         $imageFileType = strtolower(pathinfo($image_user, PATHINFO_EXTENSION));
         $new_image_name = $id . "_" . time() . "." . $imageFileType;
-        $target_file = $target_dir . $new_image_name;
+            $query = "UPDATE details_usuarios SET age='" . mysqli_real_escape_string($conn, $age) . "', gender='" . mysqli_real_escape_string($conn, $gender) . "', height='" . mysqli_real_escape_string($conn, $height) . "', weight='" . mysqli_real_escape_string($conn, $weight) . "', image_user='" . mysqli_real_escape_string($conn, $new_image_name) . "' WHERE id_usuarios='" . mysqli_real_escape_string($conn, $id) . "'";
 
         if (move_uploaded_file($_FILES["image_user"]["tmp_name"], $target_file)) {
             $query = "UPDATE details_usuarios SET age='$age', gender='$gender', height='$height', weight='$weight', image_user='$new_image_name' WHERE id_usuarios='$id'";
         } else {
             echo "Error al subir la imagen";
-            exit();
+        $query = "UPDATE details_usuarios SET age='" . mysqli_real_escape_string($conn, $age) . "', gender='" . mysqli_real_escape_string($conn, $gender) . "', height='" . mysqli_real_escape_string($conn, $height) . "', weight='" . mysqli_real_escape_string($conn, $weight) . "' WHERE id_usuarios='" . mysqli_real_escape_string($conn, $id) . "'";
         }
     } else {
         $query = "UPDATE details_usuarios SET age='$age', gender='$gender', height='$height', weight='$weight' WHERE id_usuarios='$id'";
@@ -137,50 +140,50 @@ if(isset($_POST['publicar'])) {
         <div class="edit-profile-container">
             <h1>Editar perfil</h1>
             <form method="POST" enctype="multipart/form-data">
-                <div class="edit-profile-info">
-                    <div class="edit-profile-img">
-                        <input type="file" name="image_user" accept="image/*" onchange="previewImage(this)">
-                        <div id="image-preview-edit">
-                        <?php if($rowDetails && $rowDetails['image_user']) { ?>
-                            <img src="images/users/<?php echo $rowDetails['image_user']; ?>" alt="Profile Image" style="width: 20%;">
-                        <?php } ?>
-                        </div>
-                    </div>
+            <div class="edit-profile-info">
+                <div class="edit-profile-img">
+                <input type="file" name="image_user" accept="image/*" onchange="previewImage(this)">
+                <div id="image-preview-edit">
+                <?php if($rowDetails && $rowDetails['image_user']) { ?>
+                    <img src="images/users/<?php echo $rowDetails['image_user']; ?>" alt="Profile Image" style="width: 20%;">
+                <?php } ?>
                 </div>
-                <script>
-                function previewImage(input) {
-                    var preview = document.getElementById('image-preview-edit');
-                    preview.innerHTML = '';
-                    var file = input.files[0];
-                    if (file) {
-                        var reader = new FileReader();
-                        reader.onload = function (e) {
-                            var img = document.createElement('img');
-                            img.src = e.target.result;
-                            img.style.width = '20%';
-                            preview.appendChild(img);
-                        }
-                        reader.readAsDataURL(file);
-                    }
+                </div>
+            </div>
+            <script>
+            function previewImage(input) {
+                var preview = document.getElementById('image-preview-edit');
+                preview.innerHTML = '';
+                var file = input.files[0];
+                if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.width = '20%';
+                    preview.appendChild(img);
                 }
-                </script>
-                <div class="edit-profile-data">
-                    <h2><?php echo $name; ?></h2>
-                    <p>Edad: <input type="text" name="age" value="<?php echo $age; ?>"></p>
-                    <p>Genero: 
-                    <select name="gender">
-                        <option value="masculino" <?php if($gender == 'masculino') echo 'selected'; ?>>Masculino</option>
-                        <option value="femenino" <?php if($gender == 'femenino') echo 'selected'; ?>>Femenino</option>
-                        <option value="otro" <?php if($gender == 'otro') echo 'selected'; ?>>Otro</option>
-                    </select>
-                    </p>
-                    <p>Altura: <input type="text" name="height" value="<?php echo $height; ?>"></p>
-                    <p>Peso: <input type="text" name="weight" value="<?php echo $weight; ?>"></p>
-                </div>
-                <div class="edit-profile-options">
-                    <button type="submit" name="save-edit" class="btn-save-profile">Guardar cambios</button>
-                    <button type="submit" name="cancel-edit" class="btn-cancel-profile">Cancelar</button>
-                </div>
+                reader.readAsDataURL(file);
+                }
+            }
+            </script>
+            <div class="edit-profile-data">
+                <h2><?php echo $name; ?></h2>
+                <p>Edad: <input type="number" name="age" value="<?php echo htmlspecialchars($age); ?>" required></p>
+                <p>Genero: 
+                <select name="gender" required>
+                <option value="masculino" <?php if($gender == 'masculino') echo 'selected'; ?>>Masculino</option>
+                <option value="femenino" <?php if($gender == 'femenino') echo 'selected'; ?>>Femenino</option>
+                <option value="otro" <?php if($gender == 'otro') echo 'selected'; ?>>Otro</option>
+                </select>
+                </p>
+                <p>Altura (cm): <input type="number" name="height" value="<?php echo htmlspecialchars($height); ?>" required></p>
+                <p>Peso (kg): <input type="number" name="weight" value="<?php echo htmlspecialchars($weight); ?>" required></p>
+            </div>
+            <div class="edit-profile-options">
+                <button type="submit" name="save-edit" class="btn-save-profile">Guardar cambios</button>
+                <button type="submit" name="cancel-edit" class="btn-cancel-profile">Cancelar</button>
+            </div>
             </form>
         </div>
     <?php }else{ ?>

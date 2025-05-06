@@ -58,6 +58,129 @@ if (isset($_GET['id'])) {
                     <p>Peso: <?php echo $weight; ?></p>
                 </div>
             </div>
+            <!-- seguimiento entre usuarios -->
+            <div class="profile-followers">
+                <?php
+                // Consultar seguidores y seguidos
+                $queryFollowers = "SELECT COUNT(*) AS total_followers FROM follows WHERE followed_id='$id'";
+                $resultFollowers = mysqli_query($conn, $queryFollowers);
+                if (!$resultFollowers) {
+                    die("Error en la consulta de seguidores: " . mysqli_error($conn));
+                }
+                $totalFollowers = mysqli_fetch_assoc($resultFollowers)['total_followers'];
+
+
+                $queryFollowing = "SELECT COUNT(*) AS total_following FROM follows WHERE follower_id='$id'";
+                $resultFollowing = mysqli_query($conn, $queryFollowing);
+                if (!$resultFollowing) {
+                    die("Error en la consulta de seguidos: " . mysqli_error($conn));
+                }
+                $totalFollowing = mysqli_fetch_assoc($resultFollowing)['total_following'];
+                ?>
+                <p><?php echo $totalFollowers; ?> <br>Seguidores</p>
+                <p><?php echo $totalFollowing; ?><br>Siguiendo</p>
+                <?php
+                // Consultar si el usuario logueado sigue al perfil que está viendo
+                $queryCheckFollow = "SELECT * FROM follows WHERE follower_id='$id_usuario' AND followed_id='$id'";
+                $resultCheckFollow = mysqli_query($conn, $queryCheckFollow);
+                if (!$resultCheckFollow) {
+                    die("Error en la consulta de seguimiento: " . mysqli_error($conn));
+                }
+                $isFollowing = mysqli_num_rows($resultCheckFollow) > 0;
+                ?>
+                <button class="btn-follow
+                    <?php echo $isFollowing ? 'unfollow' : 'follow'; ?>" onclick="toggleFollow(<?php echo $id; ?>)">
+
+                    <?php echo $isFollowing ? '<div class="svg-wrapper-1">
+                        <div class="svg-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(41, 149, 7, 1);"><path d="M14 11h8v2h-8zM4.5 8.552c0 1.995 1.505 3.5 3.5 3.5s3.5-1.505 3.5-3.5-1.505-3.5-3.5-3.5-3.5 1.505-3.5 3.5zM4 19h10v-1c0-2.757-2.243-5-5-5H7c-2.757 0-5 2.243-5 5v1h2z"></path></svg>
+                        </div>
+                    </div>
+                    <span>
+                        Dejar de seguir</span>' : '<div class="svg-wrapper-1">
+                        <div class="svg-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(41, 149, 7, 1);"><path d="M4.5 8.552c0 1.995 1.505 3.5 3.5 3.5s3.5-1.505 3.5-3.5-1.505-3.5-3.5-3.5-3.5 1.505-3.5 3.5zM19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3zM4 19h10v-1c0-2.757-2.243-5-5-5H7c-2.757 0-5 2.243-5 5v1h2z"></path></svg>
+                        </div>
+                    </div>
+                    <span>
+                        Seguir</span>'; ?>
+                    
+                </button>
+                <script>
+                    function toggleFollow(userId) {
+                        var followButton = document.querySelector('.btn-follow');
+                        var isFollowing = followButton.classList.contains('unfollow');
+                        var formData = new FormData();
+                        formData.append('user_id', userId);
+                        formData.append('follower_id', <?php echo $id_usuario; ?>);
+
+                        sendFollowRequest(formData, isFollowing);
+                    }
+
+                    function sendFollowRequest(formData, isFollowing) {
+                        fetch('follow_user.php', {
+                            method: 'POST',
+                            body: formData
+                        }).then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        }).then(data => {
+                            if (!data.success) {
+                                throw new Error(data.message || 'Error en la solicitud');
+                            }
+                            var followButton = document.querySelector('.btn-follow');
+                            if (isFollowing) {
+                                followButton.classList.remove('unfollow');
+                                followButton.classList.add('follow');
+                                followButton.innerHTML = `<div class="svg-wrapper-1">
+                        <div class="svg-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(41, 149, 7, 1);"><path d="M4.5 8.552c0 1.995 1.505 3.5 3.5 3.5s3.5-1.505 3.5-3.5-1.505-3.5-3.5-3.5-3.5 1.505-3.5 3.5zM19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3zM4 19h10v-1c0-2.757-2.243-5-5-5H7c-2.757 0-5 2.243-5 5v1h2z"></path></svg>
+                        </div>
+                    </div>
+                    <span>
+                        Seguir</span>`;
+                                updateFollowCounts(-1, 0);
+                            } else {
+                                followButton.classList.remove('follow');
+                                followButton.classList.add('unfollow');
+                                followButton.innerHTML = `<div class="svg-wrapper-1">
+                        <div class="svg-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(41, 149, 7, 1);"><path d="M14 11h8v2h-8zM4.5 8.552c0 1.995 1.505 3.5 3.5 3.5s3.5-1.505 3.5-3.5-1.505-3.5-3.5-3.5-3.5 1.505-3.5 3.5zM4 19h10v-1c0-2.757-2.243-5-5-5H7c-2.757 0-5 2.243-5 5v1h2z"></path></svg>
+                        </div>
+                    </div>
+                    <span style="font-size: 12px;">
+                        Dejar de seguir</span>`;
+                                updateFollowCounts(1, 0);
+                            }
+                        }).catch(error => {
+                            console.error('Error:', error);
+                            showNotification('Error al procesar la solicitud. Por favor, inténtelo de nuevo más tarde.', 'error');
+                        });
+                    }
+
+                    function updateFollowCounts(followerChange, followingChange) {
+                        var followersElement = document.querySelector('.profile-followers p:nth-child(1)');
+                        var followingElement = document.querySelector('.profile-followers p:nth-child(2)');
+                        
+                        var currentFollowers = parseInt(followersElement.textContent.trim()) || 0;
+                        var currentFollowing = parseInt(followingElement.textContent.trim()) || 0;
+                        followersElement.innerHTML = (currentFollowers + followerChange) + '<br>Seguidores';
+                        followingElement.innerHTML = (currentFollowing + followingChange) + '<br>Siguiendo';
+                    }
+
+                    function showNotification(message, type) {
+                        var notification = document.createElement('div');
+                        notification.className = 'notification ' + type;
+                        notification.textContent = message;
+                        document.body.appendChild(notification);
+                        setTimeout(function() {
+                            notification.remove();
+                        }, 3000);
+                    }
+                </script>
+                
         </div>
     </div>
     <div class="profile-posts-container">

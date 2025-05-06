@@ -24,7 +24,7 @@ $idUsuario = $row['id'];
     <div class="contenedor-publicaciones-explorar">
         <div class="contenedor-publicaciones-gustados" id="gustados">
                 <?php
-                $query="SELECT p.post, p.time, u.name, u.id, p.id as id_post, COUNT(pl.post_id) AS total_likes FROM users_post p LEFT JOIN usuarios u ON u.id = p.id_usuario LEFT JOIN post_likes pl ON pl.post_id = p.id GROUP BY p.id, p.post, p.time, u.name, u.id, p.id ORDER BY `total_likes` DESC";
+                $query="SELECT p.post, p.time, u.name, u.id, p.id AS id_post, COUNT(pl.post_id) AS total_likes, d.image_user FROM users_post p LEFT JOIN usuarios u ON u.id = p.id_usuario LEFT JOIN details_usuarios d ON d.id_usuarios = u.id LEFT JOIN post_likes pl ON pl.post_id = p.id GROUP BY p.id, p.post, p.time, u.name, u.id, d.image_user ORDER BY total_likes DESC;";
                 $result=mysqli_query($conn,$query);
                 while($postExplorar=mysqli_fetch_assoc($result)){
                     $post_id = $postExplorar['id_post'];
@@ -32,6 +32,7 @@ $idUsuario = $row['id'];
                     $time = $postExplorar['time'];
                     $id = $postExplorar['id'];
                     $name = $postExplorar['name'];
+                    $image_user = $postExplorar['image_user'];
                         // Consultar archivos asociados a la publicación
                     $queryFiles = "SELECT * FROM files_post WHERE post_id='$post_id'";
                     $resultFiles = mysqli_query($conn, $queryFiles);
@@ -46,12 +47,18 @@ $idUsuario = $row['id'];
                         <div class="post-explorar" id="post-<?php echo $post_id; ?>-gustados">
                             <div class="post-info-explorar">
                                 <div class="post-user">
-                                    <?php if (empty($postExplorarDetails['image_user'])) { ?>
+                                    <?php if (empty($image_user)) { ?>
                                         <img src="images/icons/usr.png">
                                     <?php } else { ?>
-                                        <img src="images/users/<?php echo $rowDetails['image_user']; ?>">
+                                        <img src="images/users/<?php echo $image_user; ?>">
                                     <?php } ?>
-                                    <h2><a href="perfiles.php?id=<?php  echo $id  ?>"><?php echo $name; ?></a></h2>
+                                    <!-- si el perfil es el de la persona de esta session que lo envie a profile.php -->
+
+                                    <?php if ($id == $idUsuario) { ?>
+                                        <h2><a href="profile.php"><?php echo $name; ?></a></h2>
+                                    <?php } else { ?>
+                                        <h2><a href="perfiles.php?id=<?php echo $id; ?>"><?php echo $name; ?></a></h2>
+                                    <?php } ?>
                                 </div>
                                 <p><?php echo $time; ?></p>
                             </div>
@@ -123,16 +130,35 @@ $idUsuario = $row['id'];
                     while ($postExplorarFiles = mysqli_fetch_assoc($resultFiles)) {
                         $files[] = $postExplorarFiles['files'];
                     }
+                    // consiguiendo la imagen del usuario
+                    $queryDetails = "SELECT image_user FROM details_usuarios WHERE id_usuarios='$id'";
+                    $resultDetails = mysqli_query($conn, $queryDetails);
+                    if (!$resultDetails) {
+                        die("Error en la consulta de detalles de usuario: " . mysqli_error($conn));
+                    }
+                    $postExplorarDetails = mysqli_fetch_assoc($resultDetails);
+                    // Verificar si se obtuvo la imagen del usuario
+                    if ($postExplorarDetails) {
+                        $image_user = $postExplorarDetails['image_user'];
+                    } else {
+                        $image_user = ""; 
+                    }
+
                     ?>
                         <div class="post-explorar" id="post-<?php echo $post_id . "-nuevos"; ?>">
                             <div class="post-info-explorar">
                                 <div class="post-user">
-                                    <?php if (empty($postExplorarDetails['image_user'])) { ?>
+                                    <?php if (empty($image_user)) { ?>
                                         <img src="images/icons/usr.png">
                                     <?php } else { ?>
-                                        <img src="images/users/<?php echo $rowDetails['image_user']; ?>">
+                                        <img src="images/users/<?php echo $image_user; ?>">
                                     <?php } ?>
-                                    <h2><a href="perfiles.php?id=<?php  echo $id  ?>"><?php echo $name; ?></a></h2>
+
+                                    <?php if ($id == $idUsuario) { ?>
+                                        <h2><a href="profile.php"><?php echo $name; ?></a></h2>
+                                    <?php } else { ?>
+                                        <h2><a href="perfiles.php?id=<?php echo $id; ?>"><?php echo $name; ?></a></h2>
+                                    <?php } ?>
                                 </div>
                                 <p><?php echo $time; ?></p>
                             </div>
@@ -231,16 +257,34 @@ $idUsuario = $row['id'];
                     while ($postExplorarFiles = mysqli_fetch_assoc($resultFiles)) {
                         $files[] = $postExplorarFiles['files'];
                     }
+                    // consiguiendo la imagen del usuario
+                    $queryDetails = "SELECT image_user FROM details_usuarios WHERE id_usuarios='$id'";
+                    $resultDetails = mysqli_query($conn, $queryDetails);
+                    if (!$resultDetails) {
+                        die("Error en la consulta de detalles de usuario: " . mysqli_error($conn));
+                    }
+                    $postExplorarDetails = mysqli_fetch_assoc($resultDetails);
+                    // Verificar si se obtuvo la imagen del usuario
+                    if ($postExplorarDetails) {
+                        $image_user = $postExplorarDetails['image_user'];
+                    } else {
+                        $image_user = ""; 
+                    }
+                    
                     ?>
                         <div class="post-explorar" id="post-<?php echo $post_id; ?>">
                             <div class="post-info-explorar">
                                 <div class="post-user">
-                                    <?php if (empty($postExplorarDetails['image_user'])) { ?>
+                                    <?php if (empty($image_user)) { ?>
                                         <img src="images/icons/usr.png">
                                     <?php } else { ?>
-                                        <img src="images/users/<?php echo $rowDetails['image_user']; ?>">
+                                        <img src="images/users/<?php echo $image_user; ?>">
+                                    <?php } 
+                                    if ($id == $idUsuario) { ?>
+                                        <h2><a href="profile.php"><?php echo $name; ?></a></h2>
+                                    <?php } else { ?>
+                                        <h2><a href="perfiles.php?id=<?php echo $id; ?>"><?php echo $name; ?></a></h2>
                                     <?php } ?>
-                                    <h2><a href="perfiles.php?id=<?php  echo $id  ?>"><?php echo $name; ?></a></h2>
                                 </div>
                                 <p><?php echo $time; ?></p>
                             </div>

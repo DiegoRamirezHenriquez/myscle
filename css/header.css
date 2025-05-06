@@ -57,7 +57,16 @@ header img {
     width: 7%; 
   }
 }
-
+@media screen and (max-width: 1000px) {
+  header img {
+      width: 10%;
+  }
+}
+@media screen and (max-width: 768px) {
+  header img {
+      width: 15%;
+  }
+}
 /*estilos de boton registro*/
 
 #btn-register {
