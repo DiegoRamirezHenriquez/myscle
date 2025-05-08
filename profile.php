@@ -57,7 +57,7 @@ if(isset($_POST['save-edit'])) {
         $target_dir = "images/users/";
         $imageFileType = strtolower(pathinfo($image_user, PATHINFO_EXTENSION));
         $new_image_name = $id . "_" . time() . "." . $imageFileType;
-            $query = "UPDATE details_usuarios SET age='" . mysqli_real_escape_string($conn, $age) . "', gender='" . mysqli_real_escape_string($conn, $gender) . "', height='" . mysqli_real_escape_string($conn, $height) . "', weight='" . mysqli_real_escape_string($conn, $weight) . "', image_user='" . mysqli_real_escape_string($conn, $new_image_name) . "' WHERE id_usuarios='" . mysqli_real_escape_string($conn, $id) . "'";
+        $target_file = $target_dir . $new_image_name; // Define the target file path
 
         if (move_uploaded_file($_FILES["image_user"]["tmp_name"], $target_file)) {
             $query = "UPDATE details_usuarios SET age='$age', gender='$gender', height='$height', weight='$weight', image_user='$new_image_name' WHERE id_usuarios='$id'";
@@ -206,7 +206,29 @@ if(isset($_POST['publicar'])) {
                         <p>Peso: <?php echo $weight; ?></p>
                     </div>
                 </div>
-                <div class="profile-options">
+                <!-- mostrar la cantidad de seguidores y seguidos -->
+                <div class="profile-followers">
+                    <p>
+                        <?php
+                        $queryFollowers = "SELECT COUNT(*) AS total_followers FROM follows WHERE followed_id='$id'";
+                        $resultFollowers = mysqli_query($conn, $queryFollowers);
+                        $rowFollowers = mysqli_fetch_assoc($resultFollowers);
+                        echo $rowFollowers['total_followers'];
+                        ?><br>
+                        Seguidores
+                    </p>
+                    <p>
+                        <?php
+                        $queryFollowing = "SELECT COUNT(*) AS total_following FROM follows WHERE follower_id='$id'";
+                        $resultFollowing = mysqli_query($conn, $queryFollowing);
+                        $rowFollowing = mysqli_fetch_assoc($resultFollowing);
+                        echo $rowFollowing['total_following'];
+                        ?><br>
+                        Seguidos
+                    </p>
+                </div>
+                    
+                    <div class="profile-options">
                     <form method="POST" class="edit-profile-form">
                         <button type="submit" class="btn-edit-profile" name="goto-edit-perfil">Editar perfil
                             <svg class="svg" viewBox="0 0 512 512">

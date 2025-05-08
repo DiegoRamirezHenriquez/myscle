@@ -60,4 +60,60 @@ $isLoggedIn = isset($email);
         <?php } ?>
 
     </header>
-
+    <!-- quiero que este header se pase abajo y se modifiquen las palabras por iconos, desaparezca la img al pasar a celular -->
+    <div class="header-movil">
+        <div class="header-movil-contenido">
+            <a href="home.php"><i class='bx bx-home' style="color: white;"></i></a>
+            <a href="explorar.php"><i class='bx bx-compass' style="color: white;"></i></a>
+            <a href="profile.php"><i class='bx bx-user' style="color: white;"></i></a>
+            <?php if(!$isLoggedIn){ ?>
+                <a href="login.php"><i class='bx bx-log-in' style="color: white;"></i></a>
+                <a href="register.php"><i class='bx bx-user-plus' style="color: white;"></i></a>
+            <?php } else { ?>
+                <form method="post" class="logout-form">
+                    <button type="submit" name="logout" class="logout-btn">
+                        <i class='bx bx-log-out' style="color: white;"></i>
+                    </button>
+                </form>
+            <?php } ?>
+        </div>
+    </div>
+    <style>
+        .header-movil {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #164B60;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .header-movil-contenido {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+        .header-movil-contenido a, .header-movil-contenido .logout-btn {
+            color: #333;
+            font-size: 24px;
+            text-decoration: none;
+        }
+        .logout-form {
+            margin: 0;
+        }
+        .logout-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #333;
+            font-size: 24px;
+        }
+        @media (max-width: 768px) {
+            header {
+                display: none;
+            }
+            .header-movil {
+                display: block;
+            }
+        }
+    </style>
