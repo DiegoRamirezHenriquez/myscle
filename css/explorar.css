@@ -8,23 +8,29 @@
 .contenedor-publicaciones-explorar{
     width: 100%;
 }
-.contenedor-opciones-explorar{
+.contenedor-opciones-explorar {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    background-color: #13943c;
-    min-width: 25%;
-    padding: .1rem;
-    border-radius: 12px;
-    margin: .3rem;
+    background-color: #1e8e3e;
+    min-width: 30%;
+    padding: 0.5rem;
+    border-radius: 15px;
+    margin: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
-.opciones-explorar{
-    padding: 5px;
+.opciones-explorar {
+    padding: 8px;
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 12px;
+    color: #ffffff;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
-.opciones-explorar:hover{
-    background-color: #027d2971 !important;
+.opciones-explorar:hover {
+    background-color: #145a2a;
+    transform: scale(1.05);
 }
 .contenedor-publicaciones-gustados{
 

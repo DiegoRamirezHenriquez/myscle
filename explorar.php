@@ -480,3 +480,5 @@ $idUsuario = $row['id'];
         document.body.appendChild(modal);
     }
 </script>
+<?php
+include("layout/footer.php");
