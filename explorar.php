@@ -52,7 +52,6 @@ $idUsuario = $row['id'];
                                     <?php } else { ?>
                                         <img src="images/users/<?php echo $image_user; ?>">
                                     <?php } ?>
-                                    <!-- si el perfil es el de la persona de esta session que lo envie a profile.php -->
 
                                     <?php if ($id == $idUsuario) { ?>
                                         <h2><a href="profile.php"><?php echo $name; ?></a></h2>
@@ -60,7 +59,25 @@ $idUsuario = $row['id'];
                                         <h2><a href="perfiles.php?id=<?php echo $id; ?>"><?php echo $name; ?></a></h2>
                                     <?php } ?>
                                 </div>
-                                <p><?php echo $time; ?></p>
+                                <?php
+                                date_default_timezone_set('America/Santiago');
+                                        $postTime = strtotime($time);
+                                        $currentTime = time();
+                                        $timeDifference = $currentTime - $postTime;
+
+                                        if ($timeDifference < 60) {
+                                            $timeAgo = $timeDifference . " segundos";
+                                        } elseif ($timeDifference < 3600) {
+                                            $timeAgo = floor($timeDifference / 60) . " minutos";
+                                        } elseif ($timeDifference < 86400) {
+                                            $timeAgo = floor($timeDifference / 3600) . " horas";
+                                        } elseif ($timeDifference < 604800) {
+                                            $timeAgo = floor($timeDifference / 86400) . " días";
+                                        } else {
+                                            $timeAgo = date("d M Y", $postTime);
+                                        }
+                                    ?>
+                                    <p><?php echo $timeAgo; ?></p>
                             </div>
                             <div class="post-data">
                                 <p><?php echo $description; ?></p>
@@ -160,7 +177,25 @@ $idUsuario = $row['id'];
                                         <h2><a href="perfiles.php?id=<?php echo $id; ?>"><?php echo $name; ?></a></h2>
                                     <?php } ?>
                                 </div>
-                                <p><?php echo $time; ?></p>
+                                <?php
+                                date_default_timezone_set('America/Santiago');
+                                        $postTime = strtotime($time);
+                                        $currentTime = time();
+                                        $timeDifference = $currentTime - $postTime;
+
+                                        if ($timeDifference < 60) {
+                                            $timeAgo = $timeDifference . " segundos";
+                                        } elseif ($timeDifference < 3600) {
+                                            $timeAgo = floor($timeDifference / 60) . " minutos";
+                                        } elseif ($timeDifference < 86400) {
+                                            $timeAgo = floor($timeDifference / 3600) . " horas";
+                                        } elseif ($timeDifference < 604800) {
+                                            $timeAgo = floor($timeDifference / 86400) . " días";
+                                        } else {
+                                            $timeAgo = date("d M Y", $postTime);
+                                        }
+                                    ?>
+                                    <p><?php echo $timeAgo; ?></p>
                             </div>
                             <div class="post-data">
                                 <p><?php echo $description; ?></p>
@@ -286,7 +321,25 @@ $idUsuario = $row['id'];
                                         <h2><a href="perfiles.php?id=<?php echo $id; ?>"><?php echo $name; ?></a></h2>
                                     <?php } ?>
                                 </div>
-                                <p><?php echo $time; ?></p>
+                                <?php
+                                    date_default_timezone_set('America/Santiago');
+                                        $postTime = strtotime($time);
+                                        $currentTime = time();
+                                        $timeDifference = $currentTime - $postTime;
+
+                                        if ($timeDifference < 60) {
+                                            $timeAgo = $timeDifference . " segundos";
+                                        } elseif ($timeDifference < 3600) {
+                                            $timeAgo = floor($timeDifference / 60) . " minutos";
+                                        } elseif ($timeDifference < 86400) {
+                                            $timeAgo = floor($timeDifference / 3600) . " horas";
+                                        } elseif ($timeDifference < 604800) {
+                                            $timeAgo = floor($timeDifference / 86400) . " días";
+                                        } else {
+                                            $timeAgo = date("d M Y", $postTime);
+                                        }
+                                    ?>
+                                    <p><?php echo $timeAgo; ?></p>
                             </div>
                             <div class="post-data">
                                 <p><?php echo $description; ?></p>

@@ -61,7 +61,25 @@ if ($result_posts && mysqli_num_rows($result_posts) > 0) {
                                         
                                         <h2><a href="perfiles.php?id=<?php  echo $post['id_usuario']  ?>"><?php echo $name; ?></a></h2>
                                     </div>
-                                    <p><?php echo $post['time']; ?></p>
+                                    <?php
+                                    date_default_timezone_set('America/Santiago');
+                                        $postTime = strtotime($post['time']);
+                                        $currentTime = time();
+                                        $timeDifference = $currentTime - $postTime;
+
+                                        if ($timeDifference < 60) {
+                                            $timeAgo = $timeDifference . " segundos";
+                                        } elseif ($timeDifference < 3600) {
+                                            $timeAgo = floor($timeDifference / 60) . " minutos";
+                                        } elseif ($timeDifference < 86400) {
+                                            $timeAgo = floor($timeDifference / 3600) . " horas";
+                                        } elseif ($timeDifference < 604800) {
+                                            $timeAgo = floor($timeDifference / 86400) . " días";
+                                        } else {
+                                            $timeAgo = date("d M Y", $postTime);
+                                        }
+                                    ?>
+                                    <p><?php echo $timeAgo; ?></p>
                                 </div>
                                 <div class="post-data">
                                     <p><?php echo $post['post']; ?></p>
